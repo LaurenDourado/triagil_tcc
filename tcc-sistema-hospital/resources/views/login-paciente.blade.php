@@ -16,7 +16,7 @@
       height: 100%;
       margin: 0;
       font-family: 'Unbounded', cursive;
-      background: url('{{ asset('imagens/enfermagem.jpg') }}') no-repeat center center fixed;
+      background: url("{{ asset('imagens/enfermagem.jpg') }}") no-repeat center center fixed;
       background-size: cover;
       color: white;
     }
@@ -139,13 +139,14 @@
 
       <h2>Login do Paciente</h2>
 
-      <!-- Mensagens de erro -->
+      <!-- Mensagens de erro da sessão -->
       @if (session('error'))
         <div class="alert alert-danger">
           {{ session('error') }}
         </div>
       @endif
 
+      <!-- Mensagens de validação -->
       @if ($errors->any())
         <div class="alert alert-danger">
           <ul class="mb-0">
@@ -161,7 +162,6 @@
         @csrf
         <input type="text" name="cpf" class="form-control" placeholder="CPF" value="{{ old('cpf') }}" required />
         <input type="password" name="password" class="form-control" placeholder="Senha" required />
-
         <button type="submit" class="btn btn-entrar">Entrar</button>
       </form>
 

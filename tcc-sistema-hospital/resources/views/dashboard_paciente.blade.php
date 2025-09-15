@@ -77,6 +77,11 @@
             background-color: #e0ac05;
             color: #000;
         }
+        .btn-resultado[disabled] {
+            background-color: #d6d6d6;
+            color: #777;
+            cursor: not-allowed;
+        }
 
         .logout-link { 
             color: #7CDA77;
@@ -89,7 +94,7 @@
             transition: 0.3s; 
         }
 
-        .alert-success { 
+        .alert-success, .alert-danger { 
             position: absolute; 
             top: 20px; 
             left: 50%; 
@@ -118,8 +123,13 @@
 </head>
 <body>
 <div class="container-dashboard">
+
+    <!-- Mensagens de sucesso ou erro -->
     @if(session('success'))
-        <div class="alert alert-success text-center w-50">{{ session('success') }}</div>
+        <div class="alert alert-success text-center">{{ session('success') }}</div>
+    @endif
+    @if(session('error'))
+        <div class="alert alert-danger text-center">{{ session('error') }}</div>
     @endif
 
     <div class="card-container">
@@ -133,7 +143,11 @@
         <a href="{{ route('guia.primeiro-socorros') }}" class="btn-option btn-guia-socorros w-100">Guia de Primeiro Socorros</a>
 
         <!-- Botão para ver o código -->
-        <a href="{{ route('resultado.prioridade', ['codigo' => Auth::guard('paciente')->user()->preTriagem->codigo ?? '']) }}" class="btn-option btn-resultado w-100">Ver Código e Resultado</a>
+        @if(Auth::guard('paciente')->user()->preTriagem)
+            <a href="{{ route('resultado.prioridade', ['codigo' => Auth::guard('paciente')->user()->preTriagem->codigo]) }}" class="btn-option btn-resultado w-100">Ver Código e Resultado</a>
+        @else
+            <button class="btn-option btn-resultado w-100" disabled>Ainda não preencheu o formulário</button>
+        @endif
 
         <!-- Link "Sair" -->
         <div class="d-flex justify-content-center mt-3">

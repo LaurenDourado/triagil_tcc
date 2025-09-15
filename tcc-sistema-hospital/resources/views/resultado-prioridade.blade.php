@@ -12,7 +12,6 @@
             min-height: 100vh;
             margin: 0;
             padding: 0;
-            /* Adicionando imagem de fundo */
             background: url('{{ asset("imagens/sala.jpg") }}') no-repeat center center fixed;
             background-size: cover;
             display: flex;
@@ -23,7 +22,7 @@
         .resultado-container {
             max-width: 600px;
             width: 90%;
-            background-color: rgba(255, 255, 255, 0.95); /* fundo semi-transparente para destacar o card */
+            background-color: rgba(255, 255, 255, 0.95);
             padding: 40px 30px;
             border-radius: 25px;
             box-shadow: 0px 10px 30px rgba(0,0,0,0.3);
@@ -93,27 +92,32 @@
 <body>
 
     <div class="resultado-container">
-        <!-- Logo -->
         <img src="{{ asset('imagens/Monograma.png') }}" alt="Logo TriÁgil" class="logo">
 
-        <h2 class="mb-4">Olá, {{ $preTriagem->paciente->name }}</h2>
+        @if($preTriagem)
+            <h2 class="mb-4">Olá, {{ $preTriagem->paciente->name }}</h2>
 
-        <!-- Prioridade -->
-        <div class="prioridade 
-            @if($preTriagem->prioridade === 'Emergência') emergencia 
-            @elseif($preTriagem->prioridade === 'Urgente') urgente 
-            @elseif($preTriagem->prioridade === 'Pouco urgente') pouco-urgente 
-            @else sem-sintomas @endif">
-            Sua prioridade é: {{ $preTriagem->prioridade }}
-        </div>
+            <!-- Prioridade -->
+            <div class="prioridade 
+                @if($preTriagem->prioridade === 'Emergência') emergencia 
+                @elseif($preTriagem->prioridade === 'Urgente') urgente 
+                @elseif($preTriagem->prioridade === 'Pouco urgente') pouco-urgente 
+                @else sem-sintomas @endif">
+                Sua prioridade é: {{ $preTriagem->prioridade }}
+            </div>
 
-        <!-- Código único -->
-        <div class="codigo-card">
-            Código único de atendimento: <br>
-            <span class="fs-3">{{ $preTriagem->codigo }}</span>
-        </div>
+            <!-- Código único -->
+            <div class="codigo-card">
+                Código único de atendimento: <br>
+                <span class="fs-3">{{ $preTriagem->codigo }}</span>
+            </div>
 
-        <p>Apresente este código na recepção do hospital.</p>
+            <p>Apresente este código na recepção do hospital.</p>
+
+        @else
+            <h3 class="mb-4 text-danger">Pré-Triagem não encontrada</h3>
+            <p>O código informado é inválido ou não existe.</p>
+        @endif
 
         <!-- Voltar ao dashboard -->
         <a href="{{ route('dashboard.paciente') }}" class="btn-dashboard">Voltar ao Dashboard</a>
