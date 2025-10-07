@@ -19,6 +19,7 @@ class Paciente extends Authenticatable
         'idade',
         'genero',
         'password',
+        'sala_id' // Adicionado para relacionamento com sala
     ];
 
     protected $hidden = [
@@ -31,8 +32,19 @@ class Paciente extends Authenticatable
         return $this->password;
     }
 
+    /**
+     * Um paciente tem uma pré-triagem
+     */
     public function preTriagem()
     {
-        return $this->hasOne(PreTriagem::class);
+        return $this->hasOne(\App\Models\PreTriagem::class);
+    }
+
+    /**
+     * Um paciente pertence a uma sala
+     */
+    public function sala()
+    {
+        return $this->belongsTo(\App\Models\Sala::class);
     }
 }

@@ -106,6 +106,16 @@
       color: #ffffff;
     }
 
+    .btn-emergencia {
+      background-color: #ac0303ff;
+      color: #ffffff;
+    }
+
+    .btn-emergencia:hover {
+      background-color: #680101ff;
+      color: #ffffff;
+    }
+
     .btn-identificacao i {
       margin-right: 10px;
       font-size: 1.3rem;
@@ -166,6 +176,10 @@
 
       <a href="{{ url('/login/funcionario') }}" class="btn-identificacao btn-funcionario">
         <i class="fas fa-stethoscope"></i> Sou Funcionário
+      </a>
+
+      <a href="tel:190" onclick="return confirm('Você deseja realmente ligar para a emergência?');" class="btn-identificacao btn-emergencia">
+        <i class="fas fa-exclamation-triangle"></i> Emergência
       </a>
     </div>
 

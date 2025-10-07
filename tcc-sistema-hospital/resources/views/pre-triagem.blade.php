@@ -210,6 +210,21 @@
                     <label class="form-check-label">Não</label>
                 </div>
             </div>
+            <!-- Tipo Sanguíneo -->
+            <div class="mb-3">
+                <label class="question">Qual o seu tipo sanguíneo?</label>
+                <select name="tipo_sanguineo" class="form-control">
+                    <option value="" selected disabled>Selecione</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                </select>
+            </div>          
 
             <!-- Botão de envio -->
             <button type="submit" class="btn btn-submit">Enviar</button>

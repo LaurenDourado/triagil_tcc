@@ -120,7 +120,7 @@
         @endif
 
         <!-- Voltar ao dashboard -->
-        <a href="{{ route('dashboard.paciente') }}" class="btn-dashboard">Voltar ao Dashboard</a>
+        <a href="{{ url()->previous() }}" class="btn-voltar">Voltar</a>
     </div>
 
 </body>

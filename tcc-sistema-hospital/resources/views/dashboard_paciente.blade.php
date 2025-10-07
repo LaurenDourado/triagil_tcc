@@ -24,12 +24,23 @@
         }
 
         .logo-container {
-            margin-bottom: 30px;
+            margin-bottom: 15px;
         }
 
         .logo-container img {
             width: 90px;
             height: auto;
+        }
+
+        .welcome-message {
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            background-color: rgba(19, 103, 138, 0.8);
+            padding: 10px 25px;
+            border-radius: 20px;
+            display: inline-block;
         }
 
         .card-container {
@@ -70,11 +81,11 @@
         }
 
         .btn-resultado {
-            background-color: #ffc107; /* Amarelo para destaque */
+            background-color: #ADFC88;
             color: #000;
         }
         .btn-resultado:hover {
-            background-color: #e0ac05;
+            background-color: #a0dc84ff;
             color: #000;
         }
         .btn-resultado[disabled] {
@@ -137,6 +148,11 @@
         <div class="logo-container">
             <img src="{{ asset('imagens/Monograma.png') }}" alt="Logo TriÁgil" />
         </div>
+
+        <!-- Mensagem de boas-vindas -->
+        @if(Auth::guard('paciente')->check())
+            <h4 class="text-white mb-3">Bem-vindo(a), {{ Auth::guard('paciente')->user()->nome }}!</h4>
+        @endif
 
         <!-- Botões principais -->
         <a href="{{ route('formulario.pre-triagem') }}" class="btn-option btn-pre-triagem w-100">Formulário Pré-Triagem</a>
