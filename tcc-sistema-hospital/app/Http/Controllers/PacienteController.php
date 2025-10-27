@@ -46,7 +46,7 @@ class PacienteController extends Controller
     {
         $paciente = Paciente::findOrFail($id);
         $pacientes = Paciente::all();
-        return view('paciente.crud', compact('paciente', 'pacientes'));
+        return view('Paciente.crud', compact('pacientes'));
     }
 
     public function destroy($id)

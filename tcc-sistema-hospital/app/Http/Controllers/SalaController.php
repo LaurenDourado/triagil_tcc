@@ -13,8 +13,15 @@ class SalaController extends Controller
      */
     public function dashboard()
     {
-        $salas = Sala::with('pacientes')->get();
-        return view('dashboard_consultorios', compact('salas'));
+        // Salas com pacientes associados
+        $salas = Sala::with('pacientes.preTriagem')->get();
+
+        // Pacientes que ainda não estão em nenhuma sala
+        $pacientesSemSala = Paciente::whereNull('sala_id')
+                                    ->with('preTriagem')
+                                    ->get();
+
+        return view('dashboard_consultorios', compact('salas', 'pacientesSemSala'));
     }
 
     /**
@@ -32,7 +39,9 @@ class SalaController extends Controller
         $nomeSala = $paciente->sala ? $paciente->sala->nome : 'Nenhuma';
 
         return response()->json([
-            'message' => "Paciente {$paciente->name} encaminhado para sala: {$nomeSala}."
+            'success' => true,
+            'message' => "Paciente {$paciente->name} encaminhado para sala: {$nomeSala}.",
+            'sala_id' => $paciente->sala_id
         ]);
     }
 }

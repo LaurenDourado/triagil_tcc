@@ -21,6 +21,7 @@ class Sala extends Model
      */
     public function pacientes()
     {
-        return $this->hasMany(\App\Models\Paciente::class);
+        return $this->hasMany(Paciente::class);
     }
+
 }

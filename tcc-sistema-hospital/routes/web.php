@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\FuncionarioLoginController;
 use App\Http\Controllers\PreTriagemController;
 use App\Http\Controllers\ResultadoPrioridadeController;
 use App\Http\Controllers\SalaController;
+use App\Http\Controllers\PacienteController;
 
 // ==============================
 // Página inicial
@@ -51,7 +52,7 @@ Route::middleware('auth:paciente')->group(function () {
         ->name('guia.primeiro-socorros');
 
     // CRUD do paciente
-    Route::get('/paciente/crud', fn() => view('Paciente.crud'))->name('paciente.crud');
+    Route::get('/paciente/crud', [PacienteController::class, 'crud'])->name('paciente.crud');
 
 });
 

@@ -43,8 +43,10 @@ class Paciente extends Authenticatable
     /**
      * Um paciente pertence a uma sala
      */
+   
     public function sala()
     {
-        return $this->belongsTo(\App\Models\Sala::class);
+        return $this->belongsTo(Sala::class);
     }
+
 }

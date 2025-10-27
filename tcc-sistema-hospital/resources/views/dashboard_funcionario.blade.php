@@ -21,6 +21,8 @@
       background-color: #f1f5f9;
       background: url('../imagens/ficha.jpg') no-repeat center center fixed;
       background-size: cover;
+      min-height: 100vh;
+      padding: 2rem;
     }
 
     /* Barra de pesquisa estilizada */
@@ -33,11 +35,12 @@
       gap: 0.6rem;
       width: 100%;
       max-width: 700px;
+      margin: 0 auto 2rem auto;
     }
 
     .search-bar img {
-      height: 24px;
-      width: 24px;
+      height: 30px;
+      width: 30px;
     }
 
     .search-input {
@@ -47,11 +50,11 @@
       width: 100%;
       border: none;
       outline: none;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       color: #333;
     }
 
-    /* Botão atualizado */
+    /* Botão "Ver sintomas" */
     .btn-sintomas {
       background: linear-gradient(90deg, #4b0082, #6a0dad);
       color: white;
@@ -66,36 +69,23 @@
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col items-center p-6">
+<body>
 
-  <!-- Cabeçalho com barra de pesquisa e bem-vindo -->
-  <header class="w-full flex flex-col md:flex-row justify-between items-center mb-6 text-white bg-[#13678A] p-4 rounded-2xl shadow-lg">
-    <div class="flex items-center gap-3">
-      <img src="../imagens/Monograma.png" alt="Logo" class="w-10 h-10">
-      <h1 class="text-xl font-bold">Dashboard de Pacientes</h1>
-    </div>
-
-    @if(Auth::check())
-      <h2 class="mt-2 md:mt-0 text-lg font-semibold">Bem-vindo, {{ Auth::user()->name }}!</h2>
-    @endif
-  </header>
 
   <!-- Barra de pesquisa -->
-  <div class="w-full flex justify-center mb-6">
-    <div class="search-bar">
-      <img src="../imagens/Monograma.png" alt="Ícone de busca">
-      <input 
-        id="searchInput"
-        type="text" 
-        placeholder="Nome do paciente"
-        class="search-input"
-        onkeyup="filtrarCards()"
-      >
-    </div>
+  <div class="search-bar">
+    <img src="{{ asset('imagens/Monograma.png') }}" alt="Logo">
+    <input 
+      id="searchInput"
+      type="text" 
+      placeholder="Nome do paciente"
+      class="search-input"
+      onkeyup="filtrarCards()"
+    >
   </div>
 
   <!-- Container de Cards -->
-  <div id="pacientesContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl">
+  <div id="pacientesContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl mx-auto">
 
     @foreach($pacientes as $paciente)
       @php
@@ -109,6 +99,7 @@
         };
 
         $dadosTriagem = [
+          'Código de Atendimento' => $triagem->codigo ?? '-',
           'Doenças' => isset($triagem->doencas) ? implode(', ', $triagem->doencas) : '-',
           'Sintomas' => isset($triagem->sintomas) ? implode(', ', $triagem->sintomas) : '-',
           'Tempo' => $triagem->tempo_sintomas ?? '-',
@@ -122,6 +113,14 @@
       <div class="card border-l-8 rounded-2xl p-4 shadow-lg cursor-move {{ $corFundo }}"
            data-detalhes='@json($dadosTriagem)'
            draggable="true">
+        
+        <!-- Badge do código -->
+        @if(isset($triagem->codigo))
+          <div class="inline-block bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full mb-2">
+            Código: {{ $triagem->codigo }}
+          </div>
+        @endif
+
         <h2 class="nome text-lg font-bold">{{ $paciente->name }}</h2>
         <p class="text-sm font-semibold">Prioridade: {{ $prioridade }}</p>
         <button onclick="abrirModal(this)" class="btn-sintomas mt-3">Ver sintomas</button>
@@ -153,11 +152,7 @@
 
       cards.forEach(card => {
         const nome = card.querySelector('.nome').textContent.toLowerCase();
-        if (nome.includes(termo)) {
-          card.style.display = 'block';
-        } else {
-          card.style.display = 'none';
-        }
+        card.style.display = nome.includes(termo) ? 'block' : 'none';
       });
     }
 

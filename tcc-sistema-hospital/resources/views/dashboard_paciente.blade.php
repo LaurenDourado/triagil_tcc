@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel do Paciente - TriÁgil</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         body, html { 
             margin: 0; 
@@ -33,15 +34,16 @@
         }
 
         .welcome-message {
-            color: #fff;
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 25px;
-            background-color: rgba(19, 103, 138, 0.8);
-            padding: 10px 25px;
-            border-radius: 20px;
-            display: inline-block;
-        }
+      color: #ffffff;
+      font-weight: 600;
+      border-radius: 15px;
+      padding: 0.6rem 1rem;
+      margin-bottom: 1.5rem;
+      display: inline-block;
+      font-size: 1.1rem;
+      animation: fadeIn 1s ease-in-out;
+    }
+
 
         .card-container {
             background-color: #13678A;
@@ -150,9 +152,12 @@
         </div>
 
         <!-- Mensagem de boas-vindas -->
-        @if(Auth::guard('paciente')->check())
-            <h4 class="text-white mb-3">Bem-vindo(a), {{ Auth::guard('paciente')->user()->nome }}!</h4>
+
+        <div class="welcome-message">
+            @if(isset($paciente))
+            <h4>Bem-vindo(a), {{ $paciente->name }}!</h4>
         @endif
+        </div>
 
         <!-- Botões principais -->
         <a href="{{ route('formulario.pre-triagem') }}" class="btn-option btn-pre-triagem w-100">Formulário Pré-Triagem</a>

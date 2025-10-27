@@ -34,7 +34,6 @@
 
     .welcome-message {
       color: #ffffff;
-      background-color: rgba(75, 0, 130, 0.8);
       font-weight: 600;
       border-radius: 15px;
       padding: 0.6rem 1rem;
@@ -104,7 +103,7 @@
 
     <!-- Mensagem de boas-vindas -->
     <div class="welcome-message">
-      Bem-vindo(a), {{ Auth::guard('funcionario')->user()->nome }}!
+      <h2>Bem-vindo, {{ Auth::guard('funcionario')->user()->name ?? 'Funcionário' }}!</h2>
     </div>
 
     <!-- Botões principais -->
