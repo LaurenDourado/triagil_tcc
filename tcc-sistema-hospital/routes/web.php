@@ -33,7 +33,7 @@ Route::post('/register/paciente', [PacienteRegisterController::class, 'register'
 // ==============================
 Route::middleware('auth:paciente')->group(function () {
 
-    // Dashboard do paciente (página principal após login)
+    // Dashboard do paciente
     Route::get('/dashboard-paciente', [PacienteLoginController::class, 'dashboard'])->name('dashboard.paciente');
 
     // Logout
@@ -53,7 +53,11 @@ Route::middleware('auth:paciente')->group(function () {
 
     // CRUD do paciente
     Route::get('/paciente/crud', [PacienteController::class, 'crud'])->name('paciente.crud');
+    Route::post('/paciente/store', [PacienteController::class, 'store'])->name('paciente.store');
 
+    Route::get('/paciente/edit/{id}', [PacienteController::class, 'edit'])->name('paciente.edit');
+    Route::post('/paciente/update/{id}', [PacienteController::class, 'update'])->name('paciente.update');
+    Route::delete('/paciente/destroy/{id}', [PacienteController::class, 'destroy'])->name('paciente.destroy');
 });
 
 // ==============================
@@ -64,7 +68,7 @@ Route::post('/login/funcionario', [FuncionarioLoginController::class, 'login'])-
 
 Route::middleware('auth:funcionario')->group(function () {
 
-    // Dashboard do funcionário (página principal após login)
+    // Dashboard do funcionário
     Route::get('/dashboard/funcionario', fn() => view('menu_funcionario'))->name('dashboard.funcionario');
 
     // Dashboard de cards (pacientes)
