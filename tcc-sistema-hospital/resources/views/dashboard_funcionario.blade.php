@@ -68,7 +68,19 @@
 </head>
 <body class="min-h-screen flex flex-col items-center p-6">
 
-  <!-- Cabeçalho com barra de pesquisa -->
+  <!-- Cabeçalho com barra de pesquisa e bem-vindo -->
+  <header class="w-full flex flex-col md:flex-row justify-between items-center mb-6 text-white bg-[#13678A] p-4 rounded-2xl shadow-lg">
+    <div class="flex items-center gap-3">
+      <img src="../imagens/Monograma.png" alt="Logo" class="w-10 h-10">
+      <h1 class="text-xl font-bold">Dashboard de Pacientes</h1>
+    </div>
+
+    @if(Auth::check())
+      <h2 class="mt-2 md:mt-0 text-lg font-semibold">Bem-vindo, {{ Auth::user()->name }}!</h2>
+    @endif
+  </header>
+
+  <!-- Barra de pesquisa -->
   <div class="w-full flex justify-center mb-6">
     <div class="search-bar">
       <img src="../imagens/Monograma.png" alt="Ícone de busca">

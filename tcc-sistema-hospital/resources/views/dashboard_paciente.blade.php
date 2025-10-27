@@ -157,7 +157,7 @@
         <!-- Botões principais -->
         <a href="{{ route('formulario.pre-triagem') }}" class="btn-option btn-pre-triagem w-100">Formulário Pré-Triagem</a>
         <a href="{{ route('guia.primeiro-socorros') }}" class="btn-option btn-guia-socorros w-100">Guia de Primeiro Socorros</a>
-
+        <a href="{{ route('paciente.crud') }}" class="btn-option btn-guia-socorros w-100">Gerenciar Cadastro</a>
         <!-- Botão para ver o código -->
         @if(Auth::guard('paciente')->user()->preTriagem)
             <a href="{{ route('resultado.prioridade', ['codigo' => Auth::guard('paciente')->user()->preTriagem->codigo]) }}" class="btn-option btn-resultado w-100">Ver Código e Resultado</a>

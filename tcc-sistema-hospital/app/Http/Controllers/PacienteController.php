@@ -1,33 +1,57 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\User; // ou Paciente se tiver outro model
+use App\Models\Paciente;
 use Illuminate\Support\Facades\Hash;
 
-class PacienteRegisterController extends Controller
+class PacienteController extends Controller
 {
-    public function showRegistrationForm()
+    public function crud()
     {
-        return view('register-paciente');
+        $pacientes = Paciente::all();
+        return view('paciente.crud', compact('pacientes'));
     }
 
-    public function register(Request $request)
+    public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|confirmed|min:6',
+            'cpf' => 'required|string|max:14',
+            'idade' => 'required|integer',
+            'email' => 'required|email',
+            'telefone' => 'required|string',
+            'genero' => 'required|string',
+            'password' => 'nullable|string|min:6',
         ]);
 
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        if ($request->id) {
+            $paciente = Paciente::findOrFail($request->id);
+            if ($request->password) {
+                $validated['password'] = Hash::make($request->password);
+            } else {
+                unset($validated['password']);
+            }
+            $paciente->update($validated);
+        } else {
+            $validated['password'] = Hash::make($request->password ?? '123456');
+            Paciente::create($validated);
+        }
 
-        return redirect('/login/paciente')->with('success', 'Cadastro realizado com sucesso! Faça login.');
+        return redirect()->route('paciente.crud')->with('success', 'Paciente salvo com sucesso!');
+    }
+
+    public function edit($id)
+    {
+        $paciente = Paciente::findOrFail($id);
+        $pacientes = Paciente::all();
+        return view('paciente.crud', compact('paciente', 'pacientes'));
+    }
+
+    public function destroy($id)
+    {
+        Paciente::findOrFail($id)->delete();
+        return redirect()->route('paciente.crud')->with('success', 'Paciente excluído com sucesso!');
     }
 }
