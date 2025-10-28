@@ -16,7 +16,7 @@
             margin: 0;
             padding: 0;
             background-color: #f5f5f5;
-            background: url('../imagens/medico.png') no-repeat center center fixed;
+            background: url('../imagens/enfermagem.jpg') no-repeat center center fixed;
         }
 
         .logo-container {
@@ -106,6 +106,16 @@
                 display: block;
             }
         }
+        .btn-voltar{
+            color: #7CDA77;
+            font-size: 1rem;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 20px;
+            text-decoration: underline;
+            transition: 0.3s; 
+        }
+       
     </style>
 </head>
 <body>
@@ -229,6 +239,9 @@
             <!-- Botão de envio -->
             <button type="submit" class="btn btn-submit">Enviar</button>
         </form>
+        <!-- Voltar ao dashboard -->
+        <a href="{{ url()->previous() }}" class="btn-voltar">Voltar</a>
     </div>
+    
 </body>
 </html>

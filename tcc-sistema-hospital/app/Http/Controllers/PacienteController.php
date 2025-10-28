@@ -5,72 +5,43 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Paciente;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class PacienteController extends Controller
 {
-    // Exibe a lista de pacientes e formulário de cadastro/edição
+    /**
+     * Exibe o formulário de cadastro/edição do paciente logado.
+     */
     public function crud()
     {
-        $pacientes = Paciente::all();
-        $paciente = null; // Nenhum paciente selecionado para edição por padrão
-        return view('paciente.crud', compact('pacientes', 'paciente'));
+        // Pega o paciente logado
+        $paciente = Auth::guard('paciente')->user();
+
+        return view('paciente.crud', compact('paciente'));
     }
 
-    // Cria ou atualiza um paciente
+    /**
+     * Cria ou atualiza o paciente logado.
+     */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'cpf' => 'required|string|max:14',
-            'idade' => 'required|integer',
-            'email' => 'required|email',
-            'telefone' => 'required|string',
-            'genero' => 'required|string',
-            'password' => 'nullable|string|min:6',
-        ]);
+        $paciente = Auth::guard('paciente')->user();
 
-        if ($request->id) {
-            // Atualiza paciente existente
-            $paciente = Paciente::findOrFail($request->id);
-            if ($request->password) {
-                $validated['password'] = Hash::make($request->password);
-            } else {
-                unset($validated['password']); // Mantém a senha antiga
-            }
-            $paciente->update($validated);
-        } else {
-            // Cria novo paciente
-            $validated['password'] = Hash::make($request->password ?? '123456');
-            Paciente::create($validated);
+        if (!$paciente) {
+            return redirect()->route('paciente.login')->with('error', 'Faça login para acessar seu cadastro.');
         }
 
-        return redirect()->route('paciente.crud')->with('success', 'Paciente salvo com sucesso!');
-    }
-
-    // Mostra o paciente específico para edição
-    public function edit($id)
-    {
-        $paciente = Paciente::findOrFail($id);
-        $pacientes = Paciente::all();
-        return view('paciente.crud', compact('pacientes', 'paciente'));
-    }
-
-    // Atualiza paciente específico via POST (opcional, se quiser separar do store)
-    public function update(Request $request, $id)
-    {
-        $paciente = Paciente::findOrFail($id);
-
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'cpf' => 'required|string|max:14',
             'idade' => 'required|integer',
             'email' => 'required|email',
-            'telefone' => 'required|string',
+            'telefone' => 'required|string|max:20',
             'genero' => 'required|string',
             'password' => 'nullable|string|min:6',
         ]);
 
-        if ($request->password) {
+        if ($request->filled('password')) {
             $validated['password'] = Hash::make($request->password);
         } else {
             unset($validated['password']);
@@ -78,13 +49,71 @@ class PacienteController extends Controller
 
         $paciente->update($validated);
 
-        return redirect()->route('paciente.crud')->with('success', 'Paciente atualizado com sucesso!');
+        return redirect()->route('paciente.crud')->with('success', 'Cadastro atualizado com sucesso!');
     }
 
-    // Exclui um paciente
-    public function destroy($id)
+    /**
+     * Mostra o paciente logado para edição.
+     * Mantido apenas por compatibilidade com rotas antigas.
+     */
+    public function edit($id = null)
     {
-        Paciente::findOrFail($id)->delete();
-        return redirect()->route('paciente.crud')->with('success', 'Paciente excluído com sucesso!');
+        $paciente = Auth::guard('paciente')->user();
+
+        if (!$paciente) {
+            return redirect()->route('paciente.login')->with('error', 'Faça login para acessar seu cadastro.');
+        }
+
+        return view('paciente.crud', compact('paciente'));
+    }
+
+    /**
+     * Atualiza os dados do paciente logado.
+     */
+    public function update(Request $request, $id = null)
+    {
+        $paciente = Auth::guard('paciente')->user();
+
+        if (!$paciente) {
+            return redirect()->route('paciente.login')->with('error', 'Faça login para acessar seu cadastro.');
+        }
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'cpf' => 'required|string|max:14',
+            'idade' => 'required|integer',
+            'email' => 'required|email',
+            'telefone' => 'required|string|max:20',
+            'genero' => 'required|string',
+            'password' => 'nullable|string|min:6',
+        ]);
+
+        if ($request->filled('password')) {
+            $validated['password'] = Hash::make($request->password);
+        } else {
+            unset($validated['password']);
+        }
+
+        $paciente->update($validated);
+
+        return redirect()->route('paciente.crud')->with('success', 'Cadastro atualizado com sucesso!');
+    }
+
+    /**
+     * Exclui o paciente logado.
+     */
+    public function destroy($id = null)
+    {
+        $paciente = Auth::guard('paciente')->user();
+
+        if (!$paciente) {
+            return redirect()->route('paciente.login')->with('error', 'Faça login para acessar seu cadastro.');
+        }
+
+        $paciente->delete();
+
+        Auth::guard('paciente')->logout();
+
+        return redirect()->route('paciente.login')->with('success', 'Cadastro excluído com sucesso!');
     }
 }

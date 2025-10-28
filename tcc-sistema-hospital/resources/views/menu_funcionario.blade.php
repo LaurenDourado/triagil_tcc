@@ -81,14 +81,14 @@
       background-color: #1d4ed8;
     }
 
-    .botao-voltar {
-      background: none;
-      color: #5cd4b2;
-      font-weight: bold;
+    .logout-link { 
+      color: #7CDA77;
       font-size: 1rem;
-      margin-top: 1rem;
-      text-decoration: none;
-      display: inline-block;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 20px;
+      text-decoration: underline;
+      transition: 0.3s; 
     }
 
     .botao-voltar:hover {
@@ -108,7 +108,7 @@
 
     <!-- Botões principais -->
     <a href="{{ route('dashboard.funcionario.cards') }}" class="botao botao-azul">
-      Ir para Dashboard
+      Gerenciar Pacientes
     </a>
 
     <a href="{{ route('dashboard.consultorios') }}" class="botao botao-verde">
@@ -116,7 +116,9 @@
     </a>
 
     <!-- Botão Voltar -->
-    <a href="{{ url('/') }}" class="botao-voltar">Voltar</a>
+    <div class="d-flex justify-content-center mt-6">
+      <a href="{{ url('/identificacao') }}" class="logout-link">Voltar</a>
+  </div>
   </div>
 
 </body>

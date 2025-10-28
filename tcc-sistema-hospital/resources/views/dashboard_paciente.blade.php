@@ -6,6 +6,7 @@
     <title>Painel do Paciente - TriÁgil</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <style>
         body, html { 
             margin: 0; 
@@ -15,13 +16,14 @@
         }
 
         .container-dashboard { 
-            background: url("{{ asset('imagens/sala.jpg') }}") no-repeat center center; 
+            background: url("{{ asset('../imagens/sala.jpg') }}") no-repeat center center; 
             background-size: cover; 
             height: 100vh; 
             display: flex; 
             flex-direction: column; 
             justify-content: center; 
             align-items: center; 
+            position: relative;
         }
 
         .logo-container {
@@ -34,16 +36,15 @@
         }
 
         .welcome-message {
-      color: #ffffff;
-      font-weight: 600;
-      border-radius: 15px;
-      padding: 0.6rem 1rem;
-      margin-bottom: 1.5rem;
-      display: inline-block;
-      font-size: 1.1rem;
-      animation: fadeIn 1s ease-in-out;
-    }
-
+            color: #ffffff;
+            font-weight: 600;
+            border-radius: 15px;
+            padding: 0.6rem 1rem;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+            font-size: 1.1rem;
+            animation: fadeIn 1s ease-in-out;
+        }
 
         .card-container {
             background-color: #13678A;
@@ -117,6 +118,33 @@
             max-width: 500px;
         }
 
+        /* Botão de perfil estilizado */
+        .btn-perfil {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #6CD0B1, #322172);
+            color: white;
+            border-radius: 50px;
+            padding: 10px 18px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+        .btn-perfil:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            background: linear-gradient(135deg, #55B594, #24175d);
+        }
+        .btn-perfil i {
+            margin-right: 8px;
+            font-size: 1.2rem;
+        }
+
         @media (max-width: 768px) {
             .card-container {
                 padding: 20px;
@@ -127,15 +155,34 @@
                 padding: 12px 25px;
             }
 
+            .btn-perfil {
+                font-size: 0.85rem;
+                padding: 8px 14px;
+            }
+
             .logout-link {
                 font-size: 0.8rem;
                 padding: 8px 15px;
             }
         }
+        .logout-link { 
+            color: #7CDA77;
+            font-size: 1rem;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 20px;
+            text-decoration: underline;
+            transition: 0.3s; 
+        }   
     </style>
 </head>
 <body>
 <div class="container-dashboard">
+
+    <!-- Botão de perfil no canto superior direito -->
+    <a href="{{ route('paciente.crud') }}" class="btn-perfil">
+        <i class="bi bi-person-circle"></i> Meu Perfil
+    </a>
 
     <!-- Mensagens de sucesso ou erro -->
     @if(session('success'))
@@ -152,17 +199,16 @@
         </div>
 
         <!-- Mensagem de boas-vindas -->
-
         <div class="welcome-message">
             @if(isset($paciente))
-            <h4>Bem-vindo(a), {{ $paciente->name }}!</h4>
-        @endif
+                <h4>Bem-vindo(a), {{ $paciente->name }}!</h4>
+            @endif
         </div>
 
         <!-- Botões principais -->
         <a href="{{ route('formulario.pre-triagem') }}" class="btn-option btn-pre-triagem w-100">Formulário Pré-Triagem</a>
         <a href="{{ route('guia.primeiro-socorros') }}" class="btn-option btn-guia-socorros w-100">Guia de Primeiro Socorros</a>
-        <a href="{{ route('paciente.crud') }}" class="btn-option btn-guia-socorros w-100">Gerenciar Cadastro</a>
+
         <!-- Botão para ver o código -->
         @if(Auth::guard('paciente')->user()->preTriagem)
             <a href="{{ route('resultado.prioridade', ['codigo' => Auth::guard('paciente')->user()->preTriagem->codigo]) }}" class="btn-option btn-resultado w-100">Ver Código e Resultado</a>

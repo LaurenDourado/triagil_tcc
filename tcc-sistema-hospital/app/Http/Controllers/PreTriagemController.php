@@ -70,4 +70,18 @@ class PreTriagemController extends Controller
         // Redirecionar para página de resultado usando o código
         return redirect()->route('resultado.prioridade', ['codigo' => $codigo]);
     }
+
+    // Apagar formulário de pré-triagem de um paciente (sem apagar o paciente)
+    public function destroy($pacienteId)
+    {
+        $preTriagem = PreTriagem::where('paciente_id', $pacienteId)->first();
+
+        if(!$preTriagem){
+            return response()->json(['success' => false], 404);
+        }
+
+        $preTriagem->delete();
+
+        return response()->json(['success' => true]);
+    }
 }

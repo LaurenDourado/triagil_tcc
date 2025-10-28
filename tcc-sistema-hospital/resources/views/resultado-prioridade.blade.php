@@ -87,6 +87,15 @@
                 padding: 8px 15px;
             }
         }
+        .btn-voltar{
+            color: #7CDA77;
+            font-size: 1rem;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 20px;
+            text-decoration: underline;
+            transition: 0.3s; 
+        }
     </style>
 </head>
 <body>

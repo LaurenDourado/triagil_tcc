@@ -51,13 +51,14 @@ Route::middleware('auth:paciente')->group(function () {
     Route::get('/guia-primeiros-socorros', fn() => view('guia_primeiros_socorros'))
         ->name('guia.primeiro-socorros');
 
-    // CRUD do paciente
-    Route::get('/paciente/crud', [PacienteController::class, 'crud'])->name('paciente.crud');
-    Route::post('/paciente/store', [PacienteController::class, 'store'])->name('paciente.store');
+    // ==========================================
+    // GERENCIAR CADASTRO (apenas do próprio paciente)
+    // ==========================================
+    Route::get('/paciente/gerenciar-cadastro', [PacienteController::class, 'crud'])->name('paciente.crud');
+    Route::post('/paciente/gerenciar-cadastro', [PacienteController::class, 'store'])->name('paciente.store');
 
-    Route::get('/paciente/edit/{id}', [PacienteController::class, 'edit'])->name('paciente.edit');
-    Route::post('/paciente/update/{id}', [PacienteController::class, 'update'])->name('paciente.update');
-    Route::delete('/paciente/destroy/{id}', [PacienteController::class, 'destroy'])->name('paciente.destroy');
+    // Rota para excluir o próprio cadastro
+    Route::delete('/paciente/gerenciar-cadastro', [PacienteController::class, 'destroy'])->name('paciente.destroy');
 });
 
 // ==============================
@@ -82,6 +83,9 @@ Route::middleware('auth:funcionario')->group(function () {
     // Atualizar sala de paciente via AJAX
     Route::post('/salas/atualizar/{paciente}', [SalaController::class, 'atualizarSala'])
         ->name('salas.atualizar');
+
+    // Rota para apagar apenas o formulário de pré-triagem de um paciente via AJAX
+    Route::delete('/pretriagens/{paciente}', [PreTriagemController::class, 'destroy'])->name('pretriagens.destroy');
 
     // Logout funcionário
     Route::post('/logout/funcionario', [FuncionarioLoginController::class, 'logout'])
