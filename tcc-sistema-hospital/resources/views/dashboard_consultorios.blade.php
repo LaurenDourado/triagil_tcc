@@ -2,14 +2,21 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Consultórios - TriÁgil</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Consultórios - TriÁgil</title>
+
   <script src="https://cdn.tailwindcss.com"></script>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700&display=swap" rel="stylesheet">
+  
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 
   <style>
     body {
       font-family: 'Unbounded', sans-serif;
-      background: url('{{ asset('imagens/ficha.jpg') }}') no-repeat center center fixed;
+      /* Seu asset de imagem de fundo */
+      background: url("{{ asset('imagens/ficha.jpg') }}") no-repeat center center fixed;
       background-size: cover;
       min-height: 100vh;
       padding: 2rem;
@@ -38,18 +45,51 @@
       object-fit: contain;
     }
 
+    /* Botão Voltar - Ajustado para ser responsivo e não fixo */
     .logout-link { 
       color: #322172;
       font-size: 1rem;
+      display: flex; /* Para centralizar o texto se ele for único */
       align-items: center;
       justify-content: center;
-      padding: 8px 20px;
+      padding: 8px 0px; /* Ajuste o padding para não ter fundo */
       text-decoration: underline;
       transition: 0.3s; 
+      margin-top: 2rem; /* Adiciona espaço acima do botão para não sobrepor cards */
+      margin-bottom: 2rem; /* Espaço abaixo */
+      width: fit-content; /* Largura ajustada ao conteúdo */
+      margin-left: auto; /* Centraliza ou move para a direita */
+      margin-right: auto; /* Centraliza ou move para a esquerda */
+      /* Removido posicionamento fixo para que não sobreponha cards */
+      /* Removidas as classes de fundo e sombra via Tailwind */
     }
 
     .logout-link:hover {
-      color: #6e4de6ff;
+      color: #55B594;
+    }
+
+    /* Media query para ajustes em telas pequenas */
+    @media (max-width: 640px) {
+      body {
+        padding: 1rem; /* Reduz o padding geral no mobile */
+      }
+
+      .page-title {
+        font-size: 1.2rem; /* Reduz o tamanho da fonte do título */
+        padding: 0.8rem 1rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .page-title img {
+        height: 30px; /* Reduz o tamanho da logo */
+        width: 30px;
+      }
+      
+      /* A fila geral e o container de salas já usam 100% da largura,
+         mas a grid de salas precisa de ajuste */
+      .grid-container {
+        grid-template-columns: 1fr; /* Força uma única coluna no mobile */
+      }
     }
   </style>
 </head>
@@ -60,7 +100,6 @@
     <span>Gerenciamento de Consultórios</span>
   </div>
 
-  <!-- Fila geral de pacientes sem sala -->
   @if($pacientesSemSala->isNotEmpty())
     <div class="bg-white rounded-2xl shadow p-4 mb-6 max-w-6xl mx-auto">
       <h2 class="text-lg font-bold mb-2">Pacientes sem sala</h2>
@@ -77,8 +116,8 @@
             };
           @endphp
           <div class="patient-card border-l-8 rounded-2xl p-3 shadow cursor-move {{ $corFundo }}"
-               draggable="true"
-               data-id="{{ $paciente->id }}">
+                draggable="true"
+                data-id="{{ $paciente->id }}">
             <h3 class="font-bold">{{ $paciente->name }}</h3>
             <p class="text-sm font-mono">Código: {{ $triagem->codigo ?? 'Não gerado' }}</p>
           </div>
@@ -87,11 +126,10 @@
     </div>
   @endif
 
-  <!-- Salas fixas -->
   @if($salas->isEmpty())
     <p class="text-center text-gray-600">Nenhuma sala cadastrada.</p>
   @else
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl mx-auto">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl mx-auto grid-container">
       @foreach($salas as $sala)
         <div class="bg-white rounded-2xl shadow p-4 flex flex-col">
           <h2 class="text-lg font-bold mb-2">{{ $sala->nome }}</h2>
@@ -113,11 +151,11 @@
                 };
               @endphp
               <div class="patient-card border-l-8 rounded-2xl p-3 shadow cursor-move {{ $corFundo }}"
-                   draggable="true"
-                   data-id="{{ $paciente->id }}">
+                    draggable="true"
+                    data-id="{{ $paciente->id }}">
                 <h3 class="font-bold">{{ $paciente->name }}</h3>
                 <p class="text-sm font-mono">Código: {{ $triagem->codigo }}</p>
-                <button onclick="removerFormulario(this)" class="mt-2 bg-red-600 text-white px-3 py-1 rounded text-sm">
+                <button onclick="removerFormulario(this)" class="mt-2 bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700 transition">
                   Remover da sala / Apagar formulário
                 </button>
               </div>
@@ -131,7 +169,7 @@
   @endif
 
   <a href="{{ route('dashboard.funcionario') }}" 
-    class="logout-link fixed bottom-4 left-4 z-50">
+    class="logout-link">
       Voltar
   </a>
 
@@ -152,6 +190,7 @@
             const codigoEl = evt.item.querySelector('p.font-mono');
 
             if(!codigoEl || codigoEl.textContent.includes('Não gerado')) {
+                // Se o paciente não tem código (formulário) ele não pode ir para uma sala
                 evt.from.appendChild(evt.item);
                 alert('Este paciente não possui formulário. Ele não pode ser adicionado à sala.');
                 return;
@@ -161,7 +200,8 @@
             const emptyMsg = evt.to.querySelector('.empty-msg');
             if(emptyMsg) emptyMsg.remove();
 
-            fetch(`/salas/atualizar/${pacienteId}`, {
+            // Lógica AJAX/Fetch para atualizar a sala no backend
+            fetch(/salas/atualizar/${pacienteId}, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -184,7 +224,8 @@
 
       if(!confirm('Deseja realmente apagar o formulário deste paciente e retirá-lo da sala?')) return;
 
-      fetch(`/pretriagens/${pacienteId}`, {
+      // Lógica AJAX/Fetch para deletar o formulário no backend
+      fetch(/pretriagens/${pacienteId}, {
           method: 'DELETE',
           headers: {
               'Content-Type': 'application/json',

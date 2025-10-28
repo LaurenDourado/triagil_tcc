@@ -17,7 +17,7 @@ Route::get('/', fn() => view('welcome'));
 // ==============================
 // Identificação
 // ==============================
-Route::get('/identificacao', fn() => view('identificacao'));
+Route::get('/identificacao', fn() => view('identificacao'))->name('identificacao');
 
 // ==============================
 // Login e cadastro PACIENTE
@@ -35,6 +35,8 @@ Route::middleware('auth:paciente')->group(function () {
 
     // Dashboard do paciente
     Route::get('/dashboard-paciente', [PacienteLoginController::class, 'dashboard'])->name('dashboard.paciente');
+    // Alias adicional para o botão "Voltar"
+    Route::get('/paciente/dashboard', [PacienteLoginController::class, 'dashboard'])->name('paciente.dashboard');
 
     // Logout
     Route::post('/logout/paciente', [PacienteLoginController::class, 'logout'])->name('paciente.logout');

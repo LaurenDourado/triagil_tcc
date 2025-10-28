@@ -14,14 +14,17 @@ class PacienteController extends Controller
      */
     public function crud()
     {
-        // Pega o paciente logado
         $paciente = Auth::guard('paciente')->user();
+
+        if (!$paciente) {
+            return redirect()->route('paciente.login')->with('error', 'Faça login para acessar seu cadastro.');
+        }
 
         return view('paciente.crud', compact('paciente'));
     }
 
     /**
-     * Cria ou atualiza o paciente logado.
+     * Cria ou atualiza o cadastro do paciente logado.
      */
     public function store(Request $request)
     {
@@ -53,8 +56,7 @@ class PacienteController extends Controller
     }
 
     /**
-     * Mostra o paciente logado para edição.
-     * Mantido apenas por compatibilidade com rotas antigas.
+     * Mostra os dados do paciente logado (mantido por compatibilidade).
      */
     public function edit($id = null)
     {
@@ -100,7 +102,7 @@ class PacienteController extends Controller
     }
 
     /**
-     * Exclui o paciente logado.
+     * Exclui o paciente logado e encerra a sessão.
      */
     public function destroy($id = null)
     {
@@ -115,5 +117,20 @@ class PacienteController extends Controller
         Auth::guard('paciente')->logout();
 
         return redirect()->route('paciente.login')->with('success', 'Cadastro excluído com sucesso!');
+    }
+
+    /**
+     * Exibe o dashboard do paciente logado.
+     * (usado para o botão "Voltar" e a rota paciente.dashboard)
+     */
+    public function dashboard()
+    {
+        $paciente = Auth::guard('paciente')->user();
+
+        if (!$paciente) {
+            return redirect()->route('paciente.login')->with('error', 'Faça login para acessar o dashboard.');
+        }
+
+        return view('paciente.dashboard', compact('paciente'));
     }
 }

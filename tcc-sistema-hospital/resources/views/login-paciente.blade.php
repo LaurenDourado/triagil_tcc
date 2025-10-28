@@ -107,8 +107,22 @@
       color: #1f8d19ff;
     }
 
+    .btn-voltar {
+      color: #7CDA77;
+      text-decoration: underline;
+      font-size: 1rem;
+      display: inline-block;
+      margin-top: 10px;
+      transition: color 0.3s ease;
+    }
+
+    .btn-voltar:hover {
+      color: #9ff19a;
+    }
+
     p.text-center {
       margin-top: 15px;
+      margin-bottom: 10px;
     }
 
     @media (max-width: 600px) {
@@ -166,8 +180,14 @@
       </form>
 
       <p class="text-center">
-        Ainda não tem cadastro? <a href="{{ route('paciente.register') }}" class="link-login">Cadastre-se</a>
+        Ainda não tem cadastro?
+        <a href="{{ route('paciente.register') }}" class="link-login">Cadastre-se</a>
       </p>
+
+      <!-- Botão Voltar centralizado -->
+      <div class="text-center">
+        <a href="{{ route('identificacao') }}" class="btn-voltar">Voltar</a>
+      </div>
     </div>
   </div>
 </body>
