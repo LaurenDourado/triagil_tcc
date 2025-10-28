@@ -76,7 +76,7 @@ class PreTriagemController extends Controller
     {
         $preTriagem = PreTriagem::where('paciente_id', $pacienteId)->first();
 
-        if(!$preTriagem){
+        if (!$preTriagem) {
             return response()->json(['success' => false], 404);
         }
 

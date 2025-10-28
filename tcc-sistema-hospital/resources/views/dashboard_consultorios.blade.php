@@ -39,7 +39,7 @@
     }
 
     .logout-link { 
-      color: #7CDA77;
+      color: #322172;
       font-size: 1rem;
       align-items: center;
       justify-content: center;
@@ -49,13 +49,12 @@
     }
 
     .logout-link:hover {
-      color: #55B594;
+      color: #6e4de6ff;
     }
   </style>
 </head>
 <body class="bg-gray-100 min-h-screen p-8">
 
-  <!-- Título principal com logo -->
   <div class="page-title">
     <img src="{{ asset('imagens/Monograma.png') }}" alt="Logo TriÁgil">
     <span>Gerenciamento de Consultórios</span>
@@ -104,7 +103,8 @@
             @forelse($sala->pacientes as $paciente)
               @php
                 $triagem = $paciente->preTriagem ?? null;
-                $prioridade = $triagem?->prioridade ?? 'Sem sintomas';
+                if (!$triagem) continue;
+                $prioridade = $triagem->prioridade ?? 'Sem sintomas';
                 $corFundo = match($prioridade) {
                     'Emergência' => 'bg-red-200 border-red-600 text-red-700',
                     'Urgente' => 'bg-yellow-200 border-yellow-500 text-yellow-700',
@@ -116,7 +116,7 @@
                    draggable="true"
                    data-id="{{ $paciente->id }}">
                 <h3 class="font-bold">{{ $paciente->name }}</h3>
-                <p class="text-sm font-mono">Código: {{ $triagem->codigo ?? 'Não gerado' }}</p>
+                <p class="text-sm font-mono">Código: {{ $triagem->codigo }}</p>
                 <button onclick="removerFormulario(this)" class="mt-2 bg-red-600 text-white px-3 py-1 rounded text-sm">
                   Remover da sala / Apagar formulário
                 </button>
@@ -130,7 +130,6 @@
     </div>
   @endif
 
-  <!-- Botão Voltar -->
   <a href="{{ route('dashboard.funcionario') }}" 
     class="logout-link fixed bottom-4 left-4 z-50">
       Voltar
@@ -138,9 +137,8 @@
 
   <script>
     const salas = @json($salas->pluck('id'));
-    salas.push(0); // fila geral
+    salas.push(0);
 
-    // Inicializar drag-and-drop
     salas.forEach(id => {
       const container = document.getElementById(id === 0 ? 'fila-geral' : 'sala-' + id);
       if(!container) return;
@@ -150,30 +148,36 @@
         animation: 150,
         swapThreshold: 0.65,
         onAdd: function(evt) {
-          const pacienteId = evt.item.getAttribute('data-id');
-          const novaSala = evt.to.id === 'fila-geral' ? null : evt.to.id.replace('sala-', '');
+            const pacienteId = evt.item.getAttribute('data-id');
+            const codigoEl = evt.item.querySelector('p.font-mono');
 
-          const emptyMsg = evt.to.querySelector('.empty-msg');
-          if(emptyMsg) emptyMsg.remove();
+            if(!codigoEl || codigoEl.textContent.includes('Não gerado')) {
+                evt.from.appendChild(evt.item);
+                alert('Este paciente não possui formulário. Ele não pode ser adicionado à sala.');
+                return;
+            }
 
-          fetch(`/salas/atualizar/${pacienteId}`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            body: JSON.stringify({ sala_id: novaSala })
-          })
-          .then(res => res.json())
-          .then(data => console.log(data))
-          .catch(err => console.error(err));
+            const novaSala = evt.to.id === 'fila-geral' ? null : evt.to.id.replace('sala-', '');
+            const emptyMsg = evt.to.querySelector('.empty-msg');
+            if(emptyMsg) emptyMsg.remove();
 
-          atualizarContagem();
+            fetch(`/salas/atualizar/${pacienteId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ sala_id: novaSala })
+            })
+            .then(res => res.json())
+            .then(data => console.log(data))
+            .catch(err => console.error(err));
+
+            atualizarContagem();
         }
       });
     });
 
-    // Função remover formulário e retirar paciente da sala
     function removerFormulario(botao) {
       const card = botao.parentElement;
       const pacienteId = card.getAttribute('data-id');
@@ -181,16 +185,15 @@
       if(!confirm('Deseja realmente apagar o formulário deste paciente e retirá-lo da sala?')) return;
 
       fetch(`/pretriagens/${pacienteId}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-TOKEN': '{{ csrf_token() }}'
-        }
+          method: 'DELETE',
+          headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-TOKEN': '{{ csrf_token() }}'
+          }
       })
       .then(res => res.json())
       .then(data => {
           if(data.success) {
-              // Remove o paciente da sala
               card.remove();
               atualizarContagem();
               alert('Formulário apagado e paciente removido da sala com sucesso!');
@@ -201,7 +204,6 @@
       .catch(err => console.error(err));
     }
 
-    // Atualizar contagem de pacientes por sala
     function atualizarContagem() {
       salas.forEach(sid => {
         if(sid === 0) return;
@@ -211,7 +213,6 @@
           const pacientesNaSala = salaEl.querySelectorAll('.patient-card').length;
           countEl.textContent = pacientesNaSala;
 
-          // Mostrar mensagem "Nenhum paciente nesta sala" se estiver vazia
           if(pacientesNaSala === 0) {
               const emptyMsg = document.createElement('p');
               emptyMsg.classList.add('empty-msg', 'text-gray-500', 'text-sm');
@@ -222,6 +223,5 @@
       });
     }
   </script>
-
 </body>
 </html>

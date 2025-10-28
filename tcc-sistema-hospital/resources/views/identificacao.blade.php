@@ -5,14 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Identificação - TriÁgil</title>
 
-  <!-- Google Fonts: Unbounded -->
-  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700&display=swap" rel="stylesheet" />
 
-  <!-- Bootstrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
 
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
   <style>
     * {
@@ -22,7 +19,8 @@
     body, html {
       margin: 0;
       padding: 0;
-      height: 100%;
+      /* Garante altura total para o body */
+      height: 100%; 
       font-family: 'Unbounded', Arial, sans-serif;
       background: url('imagens/hospital.jpg') no-repeat center center fixed;
       background-size: cover;
@@ -41,7 +39,8 @@
     .main-container {
       display: flex;
       flex-direction: row;
-      height: 100vh;
+      /* Usa 100vh para ocupar a altura total visível da tela no desktop */
+      min-height: 100vh; 
       width: 100%;
     }
 
@@ -121,6 +120,11 @@
       font-size: 1.3rem;
     }
 
+    /* Ocupa espaço restante no desktop */
+    .right-image {
+      flex: 1;
+    }
+
     /* Responsivo */
     @media (max-width: 768px) {
       .main-container {
@@ -128,11 +132,14 @@
         justify-content: center;
         align-items: center;
         padding: 20px;
+        /* Centraliza verticalmente o cartão na tela do celular */
+        height: 100vh; 
+        min-height: 100vh;
       }
 
       .left-card {
         width: 100%;
-        max-width: 90%;
+        max-width: 400px; /* Limite o tamanho do cartão no mobile para não ficar muito largo */
         border-radius: 30px;
         padding: 40px 20px;
       }
@@ -155,11 +162,6 @@
       .right-image {
         display: none;
       }
-    }
-
-    /* Ocupa espaço restante no desktop */
-    .right-image {
-      flex: 1;
     }
   </style>
 </head>

@@ -42,10 +42,10 @@
             margin-bottom: 30px;
         }
 
-        .emergencia { background-color: #dc3545; color: white; }
-        .urgente { background-color: #ffc107; color: black; }
-        .pouco-urgente { background-color: #0d6efd; color: white; }
-        .sem-sintomas { background-color: #198754; color: white; }
+        .emergencia { background-color: #FF0000; color: white; }
+        .urgente { background-color: #EAD642; color: black; }
+        .pouco-urgente { background-color: #68D760; color: white; }
+        .sem-sintomas { background-color: #2e00fbff; color: white; }
 
         .codigo-card {
             background-color: #13678A;
