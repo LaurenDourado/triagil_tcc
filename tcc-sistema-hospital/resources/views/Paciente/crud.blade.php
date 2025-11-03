@@ -8,32 +8,27 @@
   <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700&display=swap" rel="stylesheet">
 @section('content')
 <style>
-    /* 1. ADICIONANDO O FUNDO DA PÁGINA (BODY) */
     body {
-        /* Usando a função asset() do Laravel para garantir o caminho correto */
         background: url("{{ asset('imagens/sala.jpg') }}") no-repeat center center fixed;
-        background-size: cover; /* Garante que a imagem cubra todo o fundo */
-        min-height: 100vh; /* Garante que o corpo tenha altura mínima de 100% da tela */
+        background-size: cover;
+        min-height: 100vh;
     }
-    
-    /* 2. Aplicação da Fonte Unbounded em todos os elementos principais */
+
     .card-custom, .form-control, .form-select, label, .btn, .logout-link, h2 {
         font-family: 'Unbounded', sans-serif;
     }
 
-    /* Estilo do Card */
     .card-custom {
-        background-color: #0b6785; /* Cor azul escura similar ao seu menu */
+        background-color: #0b6785;
         border-radius: 20px;
         padding: 2.5rem;
         width: 100%;
         max-width: 550px;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5); /* Sombra um pouco mais escura para destacar no fundo */
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
         margin: 2rem auto;
         color: white;
     }
 
-    /* Estilo para inputs e select */
     .form-control, .form-select {
         background-color: #ffffff;
         border: 1px solid #ced4da;
@@ -47,35 +42,35 @@
         box-shadow: 0 0 0 0.25rem rgba(92, 212, 178, 0.5);
     }
 
-    /* Estilo para Labels */
     label {
         font-weight: 600;
         color: #ffffff;
         margin-bottom: 0.5rem;
         display: block;
     }
-    
-    /* Estilo da Logo e Título */
+
     .header-logo-container {
         display: flex;
         align-items: center;
         justify-content: center;
         margin-bottom: 2rem;
+        flex-wrap: wrap; /* Ajusta para mobile */
     }
-    
+
     .header-logo-container .logo {
         width: 45px;
         height: 45px;
         margin-right: 10px;
+        margin-bottom: 10px; /* Espaço extra em mobile */
     }
 
     .header-logo-container h2 {
         color: #ffffff;
         margin: 0;
         font-weight: 700;
+        text-align: center;
     }
 
-    /* Estilização para Botões */
     .btn-success, .btn-danger {
         border-radius: 12px;
         color: white;
@@ -102,36 +97,43 @@
         background-color: #c9302c;
         border-color: #c9302c;
     }
-    
+
     .btn-danger:hover {
         background-color: #a72320;
         border-color: #a72320;
         transform: scale(1.02);
     }
 
-    /* Estilo do link de Voltar */
+    /* Botão Voltar / Meu Perfil */
     .logout-link { 
         color: #7CDA77;
         font-size: 1rem;
-        align-items: center;
-        justify-content: center;
-        padding: 8px 20px;
         text-decoration: underline;
-        transition: 0.3s; 
+        margin-top: 10px;
+        transition: color 0.3s ease; 
+        display: inline-block;
     }
 
     .logout-link:hover {
-        color: #487e45ff;
+        color: #9ff19a;
     }
-    
-    /* Responsividade */
+
     @media (max-width: 767.98px) {
         .card-custom {
             padding: 1.5rem;
             margin: 1rem auto;
         }
+
+        /* Garante que o botão fique visível em mobile */
+        .logout-link {
+            display: block;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+        }
     }
 </style>
+
 <div class="container">
     <div class="card card-custom shadow mb-4">
         <div class="header-logo-container">
@@ -201,8 +203,8 @@
                 </button>
             </form>
 
-            <div class="d-flex justify-content-center mt-4">
-                <a href="{{ url()->previous() }}" class="btn-voltar">Voltar</a>
+            <div class="mt-4 text-center">
+                <a href="{{ route('dashboard.paciente') }}" class="logout-link">Voltar</a>
             </div>
         </div>
     </div>
